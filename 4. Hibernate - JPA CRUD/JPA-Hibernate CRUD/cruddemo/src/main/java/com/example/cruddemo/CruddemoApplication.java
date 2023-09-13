@@ -25,7 +25,7 @@ public class CruddemoApplication {
 
             // createStudent(studentDAO);
 
-            createMultipleStudent(studentDAO);
+            // createMultipleStudent(studentDAO);
 
             // readStudent(studentDAO);
 
@@ -77,7 +77,6 @@ public class CruddemoApplication {
     }
 
     private void findAllStudent(StudentDAO studentDAO) {
-
         List<Student> allStudent = studentDAO.findAll();
         for (Student singleStudent : allStudent) {
             System.out.println(singleStudent);
