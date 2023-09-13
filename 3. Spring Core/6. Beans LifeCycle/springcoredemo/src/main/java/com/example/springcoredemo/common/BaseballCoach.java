@@ -16,7 +16,7 @@ public class BaseballCoach implements Coach {
     }
 
     // Define our init method
-    @PostConstruct // The PostConstruct annotation is used on a method that needs to be executed after dependency injection is done to perform any initialization. | Constructor V/S PostConstruct: When the constructor is called, the bean is not yet initialized - i.e. no dependencies are injected. In the @PostConstruct method the bean is fully initialized and you can use the dependencies.
+    @PostConstruct // The PostConstruct annotation is used on a method that needs to be executed *only once* after dependency injection is done to perform any initialization. | Constructor V/S PostConstruct: When the constructor is called, the bean is not yet initialized - i.e. no dependencies are injected. In the @PostConstruct method the bean is fully initialized and you can use the dependencies.
     public void doMyStartupStuff() {
         System.out.println("In doMyStartupStuff(): " + getClass().getSimpleName());
 
