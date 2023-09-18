@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /*
+@Repository annotation is used to indicate that the class provides the mechanism for storage, retrieval, search, update and delete operation on objects from a database.
 Spring has this @Repository annotation that's basically a sub-annotation of @Component
 @Repository: For annotating DAOs, Translates those Checked JDBC exceptions[Java verifies checked exceptions at compile-time] into Unchecked JDBC exceptions[Java does not verify unchecked exceptions at compile-time], & supports Component Scanning.
 */

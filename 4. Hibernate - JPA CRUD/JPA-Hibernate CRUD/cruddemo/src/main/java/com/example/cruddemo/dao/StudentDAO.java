@@ -10,7 +10,9 @@ import java.util.List;
 The Data Access Object (DAO) pattern is a structural pattern that allows us to isolate the application/business layer from the persistence layer (usually a relational database but could be any other persistence mechanism) using an abstract API.
 The API hides from the application all the complexity of performing CRUD operations in the underlying storage mechanism. This permits both layers to evolve separately without knowing anything about each other.
 A simple DAO class will take care of keeping these components neatly decoupled from each other.
-
+The DAO (Data Access Object) layer is crucial in separating the database access logic from the business logic in the application.
+This architectural pattern provides a clean and modular way to interact with the database, This means that the DAO layer hides the details
+of how data is stored and retrieved, making it easier for other parts of the application to access data, improving code maintainability and testability.
 LINK: [DAO DESIGN PATTERN] https://www.digitalocean.com/community/tutorials/dao-design-pattern
 */
 public interface StudentDAO {

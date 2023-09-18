@@ -65,7 +65,10 @@ public class StudentRestController {
 
     */
 
+    // Exception handler code is only for the specific REST controller | Can't be reused by other controllers | We need global exception handlers to Promotes reuse & Centralizes exception handling
     // Add Another Exception Handler to catch any type of Exception thrown
+
+    /*
     @ExceptionHandler
     // The @ExceptionHandler is an annotation used to handle the specific exceptions and sending the custom responses to the client.
     public ResponseEntity<StudentErrorResponse> handleException(Exception exc) // StudentErrorResponse : Type of the Response Body | StudentNotFoundException : Exception Type to Handle
@@ -83,6 +86,8 @@ public class StudentRestController {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND); //  ResponseEntity represents the whole HTTP response: status code, headers, and body.
 
     }
+    */
+
 }
 
 
