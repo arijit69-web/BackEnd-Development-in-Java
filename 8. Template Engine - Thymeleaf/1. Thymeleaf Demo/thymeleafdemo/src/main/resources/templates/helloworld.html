@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Time Check</title>
+    <!--reference to CSS file | @ symbol's a reference to the context path of your application (app root)-->
+    <!--
+
+    The "@{/css/demo.css}" expression is called a Thymeleaf attribute and is used for URL handling and resource resolution. Here's what it does:
+
+    Resource Mapping: Thymeleaf allows you to map logical resource URLs to actual physical resource locations. In your example, @{/css/demo.css} is a logical URL for a CSS resource.
+
+    Resource Resolution: Thymeleaf, with the help of the "@" symbol, resolves the logical URL to the actual URL of the resource. This is typically done by the web framework or application server based on the configuration.
+
+    Dynamic URL Generation: The "@" symbol indicates to Thymeleaf that it should generate the actual URL for the specified resource, taking into account the application's context path and any other necessary details. In your example, Thymeleaf will generate the correct URL for the "demo.css" file.
+
+    So, in summary, the "@" symbol is used in Thymeleaf templates to generate and resolve resource URLs dynamically, making it easier to work with resources like stylesheets, scripts, and images in a web application. It's a way to keep your HTML templates dynamic and context-aware.
+
+    When we are talking about context path for static resources like css they are always starting from yourAppPackages/resources/static after that we add the rest of the path like /css/demo.css
+    -->
+    <link rel="stylesheet" th:href="@{/css/demo.css}"/>
+
+</head>
+<body>
+<p th:text="'Time on the server is ' + ${theDate}" class="funny"/>
+<!--th:text is a Thymeleaf Expression-->
+</body>
+</html>

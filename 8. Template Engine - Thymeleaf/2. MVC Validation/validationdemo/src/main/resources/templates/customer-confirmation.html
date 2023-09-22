@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer's Data</title>
+</head>
+<body>
+<!-- We can access the "customer" over here because it is coming from the @ModelAttribute("customer") passed as a parameter inside the processForm() method. -->
+The customer is confirmed: <span th:text="${customer.firstName + ' ' + customer.lastName}"/>
+</body>
+</html>
