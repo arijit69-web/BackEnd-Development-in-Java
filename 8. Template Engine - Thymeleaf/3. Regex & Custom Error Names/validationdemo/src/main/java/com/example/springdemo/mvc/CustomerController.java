@@ -78,7 +78,8 @@ model.addAttribute is used to add attributes to the model within a specific hand
 
 @Controller
 public class CustomerController {
-    @InitBinder // @InitBinder annotation works as a pre-processor | It will pre-process each web request to our controller
+    @InitBinder
+    // @InitBinder annotation works as a pre-processor | It will pre-process each web request to our controller
     public void initBinder(WebDataBinder dataBinder) {
 
         // StringTrimmerEditor: removes whitespace - leading & trailing
@@ -104,6 +105,7 @@ public class CustomerController {
     @PostMapping("/processForm")
     public String processForm( // @Valid: Tell Spring MVC to perform validation and it'll use those validation rules that's been defined in that customer class.
                                @Valid @ModelAttribute("customer") Customer theCustomer, BindingResult theBindingResult) {
+        System.out.println(theBindingResult);
         if (theBindingResult.hasErrors()) {// And theBindingResult actually holds the results of the validation. So Spring MVC will go through and perform all the validation, get the results, if there were any errors, what the error messages were. So on and so forth. If everything was successful, then it'll have that data in this given object here, theCustomer.
             return "customer-form";
         } else {
