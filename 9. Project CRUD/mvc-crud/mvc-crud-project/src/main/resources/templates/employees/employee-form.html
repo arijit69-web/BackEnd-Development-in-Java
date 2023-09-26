@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <title>Employee Form</title>
+</head>
+<body>
+<div class="container">
+    <br>
+    <div class="border p-4 rounded text-center">
+        <h3>Employee Form</h3>
+        <br>
+
+        <form action="#" th:action="@{/employees/save}"
+              th:object="${employee}" method="POST" class="d-inline-block">
+            <!-- Add a hidden form field to handle updates or else it will create a new user instead of updating the existing user of the given ID. This binds to the model attribute and tells your app which employee to update -->
+
+            <input type="hidden" th:field="*{id}"/>
+
+            <!--  *{} Selects property on referenced th:object. So firstName is a property of employee -->
+            <input type="text" th:field="*{firstName}" class="form-control mb-4 w-40" placeholder="First Name">
+
+            <input type="text" th:field="*{lastName}" class="form-control mb-4 w-40" placeholder="Last Name">
+
+            <input type="text" th:field="*{email}" class="form-control mb-4 w-40" placeholder="Email">
+            <!-- When form is submitted, it will call: employee.setFirstName() & employee.setLastName() -->
+            <button class="btn btn-info col-6" type="submit">Save</button>
+            <br>
+            <br>
+            <a th:href="@{/employees/list}"
+               class="btn btn-warning col-10">
+                Employee Directory
+            </a>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>
