@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
     <meta charset="UTF-8">
     <title>HomePage</title>
@@ -12,5 +14,27 @@
 <body>
 <h1>Welcome to my Website</h1>
 <p>A website created by Arijit Sarkar.</p>
+<br><br>
+
+<hr>
+<p>
+    <a th:href="@{/leaders}">Leadership Meeting (Only for Manager peeps)</a>
+</p>
+<p>
+    <a th:href="@{/systems}">Admin Meeting (Only for Admin peeps)</a>
+</p>
+<!-- We make use of the security authentication, 'principle.username'. This will actually display the user ID for the person who is currently logged in -->
+User: <span sec:authentication="principal.username"></span>
+<br><br>
+<!-- Spring Security provides support for accessing the user IDs and the roles. So they make it very easy for us to add the support to our webpage.
+'authorities' is the same things as 'user roles' | Display the list of roles for the given user
+Output: Role(s): [ROLE_EMPLOYEE] -> By default, Spring Security uses "ROLE_"prefix. This is configurable.
+-->
+Role(s): <span sec:authentication="principal.authorities"></span>
+<br><br>
+<!--By default, must use POST for logout-->
+<form action="#" th:action="@{/logout}" method="POST">
+    <input type="submit" value="Logout"/>
+</form>
 </body>
 </html>

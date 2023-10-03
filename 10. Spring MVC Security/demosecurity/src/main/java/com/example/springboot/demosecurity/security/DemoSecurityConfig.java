@@ -42,6 +42,9 @@ public class DemoSecurityConfig {
         // authorizeHttpRequests(): Restrict access based on the HTTP request
         http.authorizeHttpRequests(configurer ->
                         configurer
+                                .requestMatchers("/").hasRole("EMPLOYEE")
+                                .requestMatchers("/leaders/**").hasRole("MANAGER")
+                                .requestMatchers("/systems/**").hasRole("ADMIN")
                                 .anyRequest().authenticated() // Any request to the app must be authenticated (ie logged in)
                 )// We are customizing the login form reference
                 .formLogin(form ->
@@ -49,7 +52,8 @@ public class DemoSecurityConfig {
                                 .loginPage("/showMyLoginPage") // Show our custom login form at the request mapping: “/showMyLoginPage”
                                 .loginProcessingUrl("/authenticateTheUser") // Login form should POST the credentials data to this URL"/authenticateTheUser" for processing or for matching the user id and password | No Controller Request Mapping required for this. We get this for free.
                                 .permitAll() // Allow everyone to see the Login Form page. No need to be logged in.
-                );
+                )
+                .logout(logout -> logout.permitAll()); // Add Logout support for the given application | Add logout support for the default URL /logout | Send req to the default logout URL: /logout | Logout URL will be handled by Spring Security Filters | You get it for free. No coding required [Spring Security Magic]
         return http.build();
     }
 }
