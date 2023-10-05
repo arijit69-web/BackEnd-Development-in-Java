@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org": XML namespace for Thymeleaf, enabling you to use Thymeleaf-specific features and attributes in your HTML document.-->
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<title>Login</title>
+<style>
+    .failed{
+    color: red;
+    }
+</style>
+</head>
+<body>
+<h1> Custom Login Form</h1>
+<!-- This "@{/authenticateTheUser}", is based on information from our SpringSecurityConfig file, so those two things have to match up.-->
+<form action="#" th:action="@{/authenticateTheUser}"
+      method="POST">
+    <!--    If '?error' parameter is present in the URL 'http://localhost:8080/myapp/showMyLoginPage?error' like this, then show the error message-->
+    <div th:if="${param.error}">
+        <i class="failed">Sorry! You entered invalid username/password.</i>
+    </div>
+    <!--    [IMP] Spring Security defines default names for login form fields : Username field: 'username' & Password field: 'password'-->
+    <!--    Spring Security Filters will read the form data i.e. is 'username' and 'password' and authenticate the user-->
+    <p>
+        User name: <input type="text" name="username"/>
+    </p>
+    <p>
+        Password: <input type="password" name="password"/>
+    </p>
+    <input type="submit" value="Login"/>
+</form>
+</body>
+</html>

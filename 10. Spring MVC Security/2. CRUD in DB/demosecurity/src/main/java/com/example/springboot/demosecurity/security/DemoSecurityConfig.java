@@ -1,0 +1,84 @@
+package com.example.springboot.demosecurity.security;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
+
+@Configuration
+// Spring @Configuration annotation is part of the spring core framework. Spring Configuration annotation indicates that the class has @Bean definition methods. So Spring container can process the class and generate Spring Beans to be used in the application. Spring @Configuration annotation allows us to use annotations for dependency injection.
+public class DemoSecurityConfig {
+    @Bean
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+        // Creating our custom table names with SQL Raw Queries
+        JdbcUserDetailsManager theUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+
+        // Question mark “?” : Parameter value will be the username from login form
+        theUserDetailsManager
+                .setUsersByUsernameQuery("select user_id, pw, active from members where user_id=?"); // creating custom table name for users | SQL Query to find users
+        theUserDetailsManager
+                .setAuthoritiesByUsernameQuery("select user_id, role from roles where user_id=?"); // creating custom table name for authorities | | SQL Query to find authorities
+        return theUserDetailsManager;
+
+        // return new JdbcUserDetailsManager(dataSource); // This tells Spring Security to use JDBC authentication with our dataSource. So Spring Security will look in a table called users [predefined/default table name], and another table called authorities [predefined/default table name]. It knows the exact column names that it'll use.
+    }
+
+    /*
+    @Bean
+    // When should you use @Bean? Sometimes automatic configuration is not an option. When? Let's imagine that you want to wire components from 3rd-party libraries (you don't have the source code so you can't annotate its classes with @Component), so automatic configuration is not possible. The @Bean annotation returns an object that spring should register as bean in application context. The body of the method bears the logic responsible for creating the instance.
+
+    public InMemoryUserDetailsManager userDetailsManager() {// Spring In-Memory authentication uses InMemoryUserDetailsManager internally store and retrieve the user-related information which is required for Authentication.
+        // So whenever the user requests for any details, the request is filtered and passed to AuthenticationManager, which tries to authenticate the request by the using UserDetailsService.
+        // The UserDetailsService is responsible for retrieving the correct user details, InMemoryUserDetailsManager indirectly implements UserDetailsService interface. Now the InMemoryUserDetailsManager reads the in-memory hashmap and loads the UserDetails by calling the loadUserByUsername() method.
+        // Once the UserDetails is loaded via InMemoryUserDetailsManager and the authentication is successful, the SecurityContext will be updated and the request will proceed.
+        // Since we defined our users here. Spring Boot will NOT use the user/password from application.properties file instead it will use the userDetailsManager().
+        UserDetails john = User.builder() // creates a UserBuilder along with username, password and roles and return UserBuilder
+                .username("john")
+                .password("{noop}test123")//  {noop} for plain text passwords
+                .roles("EMPLOYEE")
+                .build();
+        UserDetails mary = User.builder()
+                .username("mary")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER")
+                .build();
+        UserDetails susan = User.builder()
+                .username("susan")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER", "ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(john, mary, susan);
+    }
+    */
+
+
+    //  Modify Spring Security Configuration to reference custom login form
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // authorizeHttpRequests(): Restrict access based on the roles
+        http.authorizeHttpRequests(configurer ->
+                        configurer
+                                .requestMatchers("/").hasRole("EMPLOYEE")
+                                .requestMatchers("/leaders/**").hasRole("MANAGER")
+                                .requestMatchers("/systems/**").hasRole("ADMIN")
+                                .anyRequest().authenticated() // Any request to the app must be authenticated (ie logged in)
+                )// We are customizing the login form reference
+                .formLogin(form ->
+                        form
+                                .loginPage("/showMyLoginPage") // Show our custom login form at the request mapping: “/showMyLoginPage”
+                                .loginProcessingUrl("/authenticateTheUser") // Login form should POST the credentials data to this URL"/authenticateTheUser" for processing or for matching the user id and password | No Controller Request Mapping required for this. We get this for free.
+                                .permitAll() // Allow everyone to see the Login Form page. No need to be logged in.
+                )
+                .logout(logout -> logout.permitAll())  // Add Logout support for the given application | Add logout support for the default URL /logout | Send req to the default logout URL: /logout | Logout URL will be handled by Spring Security Filters | You get it for free. No coding required [Spring Security Magic]
+
+                .exceptionHandling((configurer -> configurer.accessDeniedPage("/access-denied"))); // Configure custom page for access denied | '/access-denied': Our request mapping path
+        return http.build();
+    }
+}
