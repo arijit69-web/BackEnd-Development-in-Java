@@ -39,7 +39,7 @@ public class DemoSecurityConfig {
     //  Modify Spring Security Configuration to reference custom login form
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // authorizeHttpRequests(): Restrict access based on the HTTP request
+        // authorizeHttpRequests(): Restrict access based on the roles
         http.authorizeHttpRequests(configurer ->
                         configurer
                                 .requestMatchers("/").hasRole("EMPLOYEE")
@@ -53,7 +53,9 @@ public class DemoSecurityConfig {
                                 .loginProcessingUrl("/authenticateTheUser") // Login form should POST the credentials data to this URL"/authenticateTheUser" for processing or for matching the user id and password | No Controller Request Mapping required for this. We get this for free.
                                 .permitAll() // Allow everyone to see the Login Form page. No need to be logged in.
                 )
-                .logout(logout -> logout.permitAll()); // Add Logout support for the given application | Add logout support for the default URL /logout | Send req to the default logout URL: /logout | Logout URL will be handled by Spring Security Filters | You get it for free. No coding required [Spring Security Magic]
+                .logout(logout -> logout.permitAll())  // Add Logout support for the given application | Add logout support for the default URL /logout | Send req to the default logout URL: /logout | Logout URL will be handled by Spring Security Filters | You get it for free. No coding required [Spring Security Magic]
+
+                .exceptionHandling((configurer -> configurer.accessDeniedPage("/access-denied"))); // Configure custom page for access denied | '/access-denied': Our request mapping path
         return http.build();
     }
 }

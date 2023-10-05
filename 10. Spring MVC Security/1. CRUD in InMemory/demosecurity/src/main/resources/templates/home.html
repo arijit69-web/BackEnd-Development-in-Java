@@ -17,12 +17,19 @@
 <br><br>
 
 <hr>
-<p>
-    <a th:href="@{/leaders}">Leadership Meeting (Only for Manager peeps)</a>
-</p>
-<p>
-    <a th:href="@{/systems}">Admin Meeting (Only for Admin peeps)</a>
-</p>
+<!--Only show this section for users with MANAGER role-->
+<div sec:authorize="hasRole('MANAGER')">
+
+    <p>
+        <a th:href="@{/leaders}">Leadership Meeting (Only for Manager peeps)</a>
+    </p>
+</div>
+<!--Only show this section for users with ADMIN role-->
+<div sec:authorize="hasRole('ADMIN')">
+    <p>
+        <a th:href="@{/systems}">Admin Meeting (Only for Admin peeps)</a>
+    </p>
+</div>
 <!-- We make use of the security authentication, 'principle.username'. This will actually display the user ID for the person who is currently logged in -->
 User: <span sec:authentication="principal.username"></span>
 <br><br>
