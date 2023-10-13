@@ -42,7 +42,7 @@ public class AopdemoApplication {
     }
 
     private void demoTheBeforeAdvice(AccountDAO theAccountDAO, MembershipDAO theMembershipDAO) {
-        theAccountDAO.addAccount(new Account("Arijit", "Specialist Programmer"), true);
+        theAccountDAO.addAccount(new Account("Specialist Programmer", "Arijit Sarkar"), true);
         System.out.println(theMembershipDAO.addData());
         theMembershipDAO.addAccount();
     }
