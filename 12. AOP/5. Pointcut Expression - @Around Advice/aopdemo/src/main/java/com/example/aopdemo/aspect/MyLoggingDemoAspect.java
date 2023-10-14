@@ -20,7 +20,7 @@ public class MyLoggingDemoAspect {
     @Around("execution(* com.example.aopdemo.service.*.getFortune(boolean))")
 
     /*
-    @Around Aspect that will handle Exception
+    @Around Aspect that will handle exception
     */
     public Object aroundGetFortuneHandleException(ProceedingJoinPoint theProceedingJoinPoint) throws Throwable {
 
