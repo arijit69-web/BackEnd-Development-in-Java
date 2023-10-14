@@ -2,9 +2,7 @@ package com.example.aopdemo.aspect;
 
 import com.example.aopdemo.Account;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -18,12 +16,36 @@ import java.util.List;
 
 public class MyLoggingDemoAspect {
 
+    // Regardless of success or failure, the @After advice will always run
+    @After( // @AfterThrowing: This is an annotation in Spring AOP that marks a method as advice that should be executed after a specified pointcut when an exception is thrown. In this case, it specifies that the advice method should run after an exception is thrown.
+            "execution(* com.example.aopdemo.dao.AccountDAO.findAccounts(..))")
+    public void afterFinally(JoinPoint theJoinPoint) {
+        System.out.println("\n=====>>> Finally Block");
+    }
 
+    /*
+    @AfterThrowing Advice - Use Cases:
+        Log the exception
+        Perform auditing on the exception
+        Notify DevOps team via email or SMS
+        Encapsulate this functionality in AOP aspect for easy reuse
+
+    At this point, we are only intercepting the exception (Reading it)
+    However, the exception is still propagated to calling program
+    */
+    @AfterThrowing( // @AfterThrowing: This is an annotation in Spring AOP that marks a method as advice that should be executed after a specified pointcut when an exception is thrown. In this case, it specifies that the advice method should run after an exception is thrown.
+            pointcut = "execution(* com.example.aopdemo.dao.AccountDAO.findAccounts(..))",
+            throwing = "theException")
+// throwing = "theException": This part of the @AfterThrowing annotation specifies that the advice method should receive the thrown exception as an argument and bind it to the variable theException. This allows you to access information about the exception that was thrown.
+    public void afterThrowingFindAccountsAdvice(JoinPoint theJoinPoint, Throwable theException) {// Throwable is the root class of the Java exception hierarchy. All exceptions and errors in Java extend from Throwable. It has two main subclasses: Exception and Error.
+        System.out.println("\n=====>>> Exception is: " + theException);
+    }
 
     // @AfterReturning: The @AfterReturning annotation is used in Aspect-Oriented Programming (AOP) with frameworks like Spring to define advice that should be executed after a specified method successfully returns / after a specified method successfully executed.
     @AfterReturning(
             pointcut = "execution(* com.example.aopdemo.dao.AccountDAO.findAccounts(..))",
-            returning = "result")// result Parameter: The 'result' parameter is used to capture the return value of the findAccounts method. In the context of this advice, it's a way to access the result returned by findAccounts and use it within the advice. You can think of it as a way to retrieve and work with the data that findAccounts returns.
+            returning = "result")
+// result Parameter: The 'result' parameter is used to capture the return value of the findAccounts method. In the context of this advice, it's a way to access the result returned by findAccounts and use it within the advice. You can think of it as a way to retrieve and work with the data that findAccounts returns.
     public void afterReturningFindAccountsAdvice(JoinPoint theJoinPoint, List<Account> result) {
         System.out.println("\n=====>>> Result is: " + result);
         if (!result.isEmpty())
@@ -49,7 +71,7 @@ public class MyLoggingDemoAspect {
         Object[] args = theJoinPoint.getArgs();
 
         for (Object obj : args) {
-            System.out.println(obj);
+            System.out.println("Object: " + obj);
 
             if (obj instanceof Account) {
                 // Downcast and print Account specific data
