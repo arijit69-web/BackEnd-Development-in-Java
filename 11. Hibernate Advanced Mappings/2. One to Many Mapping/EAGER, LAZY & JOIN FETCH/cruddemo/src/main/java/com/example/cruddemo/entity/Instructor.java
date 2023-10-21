@@ -32,10 +32,12 @@ public class Instructor {
     @JoinColumn(name = "instructor_detail_id")
     private InstructorDetail instructorDetail;
 
-    @OneToMany(mappedBy = "instructor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})// Refers to "instructor" property/field in "Course" class
+    /* Only loads the instructor. Does not load the courses since they are LAZY loaded by default. FetchType for @OneToMany defaults to LAZY
+    @OneToMany(mappedBy = "instructor", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})// Explicitly setting the fetch type as 'FetchType.EAGER' |  Refers to "instructor" property/field in "Course" class
     private List<Course> courses; // Do not CASCADE the deletes. If we delete a Instructor, do not delete the associated Course
-
-
+    */
+    @OneToMany(mappedBy = "instructor", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Course> courses;
 
     public Instructor() {
     }

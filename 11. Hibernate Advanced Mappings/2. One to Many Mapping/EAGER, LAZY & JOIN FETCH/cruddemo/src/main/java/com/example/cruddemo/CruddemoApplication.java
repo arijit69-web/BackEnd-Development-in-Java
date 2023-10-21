@@ -9,6 +9,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.List;
+
 @SpringBootApplication
 public class CruddemoApplication {
 
@@ -24,8 +26,63 @@ public class CruddemoApplication {
             // deleteInstructor(appDAO);
             // findInstructorDetail(appDAO);
             // deleteInstructorDetail(appDAO);
-            createInstructorWithCourses(appDAO);
+            // createInstructorWithCourses(appDAO);
+            // findInstructorWithCourses(appDAO);
+            // findCoursesByInstructorId(appDAO);
+            // findInstructorWithCoursesUsingJoinFetch(appDAO);// Fetching Instructor & Courses in a single query and also keep LAZY option available | //Even with Instructor @OneToMany(fetchType=LAZY) This query will still retrieve Instructor & Courses | The JOIN FETCH is similar to EAGER loading
+            // updateInstructor(appDAO);
+            // updateCourse(appDAO);
+            deleteCourseById(appDAO);
+
         };
+    }
+
+    private void deleteCourseById(AppDAO appDAO) {
+        int theId = 15;
+        appDAO.deleteCourseById(theId);
+        System.out.println("Course Deleted!");
+    }
+
+    private void updateCourse(AppDAO appDAO) {
+        int theId = 12;
+        Course tempCourse = appDAO.findCourseById(theId);
+        tempCourse.setTitle("I.G.I.: I'm Going In");
+        appDAO.update(tempCourse);
+        System.out.println("Updated Course: " + tempCourse);
+
+    }
+
+    private void updateInstructor(AppDAO appDAO) {
+        int theId = 1;
+        Instructor tempInstructor = appDAO.findInstructorById(theId);
+        tempInstructor.setLastName("TESTER");
+        appDAO.update(tempInstructor);
+        System.out.println("Updated Instructor: " + tempInstructor);
+
+    }
+
+    private void findInstructorWithCoursesUsingJoinFetch(AppDAO appDAO) {
+        int theId = 1;
+        Instructor tempInstructor = appDAO.findInstructorWithCoursesUsingJoinFetch(theId);
+        System.out.println("Instructor: " + tempInstructor);
+        System.out.println("Courses: " + tempInstructor.getCourses());
+    }
+
+    private void findCoursesByInstructorId(AppDAO appDAO) {
+        int theId = 1;
+        Instructor instructor = appDAO.findInstructorById(theId);
+        System.out.println("Instructor: " + instructor);
+        List<Course> courses = appDAO.findCoursesByInstructorId(theId);
+        instructor.setCourses(courses); // It can't fetch the course directly because the Fetch Type is LAZY, so we associate/insert the course object inside the instructor object
+        System.out.println("Courses: " + instructor.getCourses());
+        System.out.println("Courses: " + courses); // Using a custom SQL query, fetch course data from the course table with Instructor ID as theId
+    }
+
+    private void findInstructorWithCourses(AppDAO appDAO) {
+        int theId = 1;
+        Instructor tempInstructor = appDAO.findInstructorById(theId);
+        System.out.println("Instructor: " + tempInstructor);
+        System.out.println("Courses: " + tempInstructor.getCourses());
     }
 
     private void createInstructorWithCourses(AppDAO appDAO) {
@@ -37,8 +94,8 @@ public class CruddemoApplication {
         tempInstructor.setInstructorDetail(tempInstructorDetail);
 
         // Creating Courses
-        Course course1 = new Course("PUBG - The BattleField");
-        Course course2 = new Course("Max Payne");
+        Course course1 = new Course("PUBG");
+        Course course2 = new Course("PinBall");
         Course course3 = new Course("IGI");
 
         // In the Instructor Object, set the courses
@@ -73,7 +130,7 @@ public class CruddemoApplication {
     }
 
     private void deleteInstructor(AppDAO appDAO) {
-        int theId = 7;
+        int theId = 1;
         appDAO.deleteInstructorById(theId);
 
     }
