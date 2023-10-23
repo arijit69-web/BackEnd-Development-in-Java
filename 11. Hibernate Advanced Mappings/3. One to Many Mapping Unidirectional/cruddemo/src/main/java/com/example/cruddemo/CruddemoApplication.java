@@ -4,6 +4,7 @@ import com.example.cruddemo.dao.AppDAO;
 import com.example.cruddemo.entity.Course;
 import com.example.cruddemo.entity.Instructor;
 import com.example.cruddemo.entity.InstructorDetail;
+import com.example.cruddemo.entity.Review;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,9 +33,44 @@ public class CruddemoApplication {
             // findInstructorWithCoursesUsingJoinFetch(appDAO);// Fetching Instructor & Courses in a single query and also keep LAZY option available | //Even with Instructor @OneToMany(fetchType=LAZY) This query will still retrieve Instructor & Courses | The JOIN FETCH is similar to EAGER loading
             // updateInstructor(appDAO);
             // updateCourse(appDAO);
-            deleteCourseById(appDAO);
+            // deleteCourseById(appDAO);
+            // createCourseAndReviews(appDAO);
+            // retrieveCourseAndReviews(appDAO);
+            deleteCourseAndReviews(appDAO);
+
 
         };
+    }
+
+    private void deleteCourseAndReviews(AppDAO appDAO) {
+        int theId = 10;
+        System.out.println("Deleting Course id: " + theId);
+        appDAO.deleteCourseById(theId);
+    }
+
+    private void retrieveCourseAndReviews(AppDAO appDAO) {
+        int theId = 10;
+        Course tempCourse = appDAO.findCourseAndReviewsByCourseId(theId);
+
+        System.out.println("Course: " + tempCourse);
+
+        System.out.println("Reviews: " + tempCourse.getReviews());
+    }
+
+    private void createCourseAndReviews(AppDAO appDAO) {
+        Course tempCourse = new Course("Pacman - How To Score One Million Points");
+
+        tempCourse.addReview(new Review("Great course ... loved it!"));
+        tempCourse.addReview(new Review("Cool course, job well done."));
+        tempCourse.addReview(new Review("What a dumb course, you are an idiot!"));
+
+        appDAO.save(tempCourse); // We will save the Course and associated Reviews along with it because we have CascadeType.ALL
+
+
+        System.out.println("Course: " + tempCourse);
+        System.out.println("Reviews: " + tempCourse.getReviews());
+
+
     }
 
     private void deleteCourseById(AppDAO appDAO) {

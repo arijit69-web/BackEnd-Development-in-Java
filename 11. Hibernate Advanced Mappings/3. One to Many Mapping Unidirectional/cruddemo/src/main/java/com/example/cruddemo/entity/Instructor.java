@@ -108,6 +108,30 @@ public class Instructor {
     }
 
     // Add convenience methods for Bi-Directional relationship
+    /*
+    Why this convenience methods?
+    The convenience method add(Course tempCourse) in the Instructor class is used to simplify the process of adding a course to an instructor and, more importantly, to manage the bidirectional relationship between the Instructor and Course entities in a more structured way. Let me explain its use and compare it to how the code would look without such a convenience method:
+    CASE 1: With Convenience Method (add(Course tempCourse)):
+        ```
+        Instructor instructor = new Instructor("John", "Doe", "johndoe@luv2code.com");
+        Course course = new Course("Introduction to Programming");
+        instructor.add(course); // Automatically establishes the relationship
+        ```
+    In this case, you simply call instructor.add(course) to add the course to the instructor's list of courses. This method internally takes care of setting the instructor for the course, ensuring that both sides of the bidirectional relationship are properly maintained. It makes the code more readable and less error-prone.
+    CASE 2: Without Convenience Method:
+    Without the convenience method, you would need to manually manage the bidirectional relationship, which could lead to more verbose and error-prone code:
+        ```
+        Instructor instructor = new Instructor("John", "Doe", "johndoe@example.com");
+        Course course = new Course("Introduction to Programming");
+        if (instructor.getCourses() == null) {
+            instructor.setCourses(new ArrayList<>());
+        }
+        instructor.getCourses().add(course); // Manually add the course
+        course.setInstructor(instructor); // Manually set the instructor for the course
+        ```
+    In this case, you have to check if the courses list is null, initialize it if necessary, manually add the course to the list, and also set the instructor for the course. This approach is more error-prone, less readable, and can lead to potential bugs if you forget to set one side of the relationship.
+    The convenience method simplifies the process of adding courses and helps ensure that the bidirectional relationship is correctly maintained without requiring the developer to perform these tasks manually. It improves code readability and reduces the chances of introducing bugs related to the relationship management.
+    */
     public void add(Course tempCourse) {
         if (courses == null) {
             courses = new ArrayList<>();
